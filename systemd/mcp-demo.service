@@ -1,0 +1,33 @@
+[Unit]
+Description=FortiWeb WAF Demo — FastMCP HTTP Server
+# Wait for the network to be up before starting, since the server binds to 0.0.0.0:8008
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Run as a dedicated no-login system user created by provision.sh
+User=mcpdemo
+Group=mcpdemo
+WorkingDirectory=/opt/demo
+
+# Activate the venv and run the server directly
+ExecStart=/opt/demo/venv/bin/python /opt/demo/mcp_server.py
+
+# Restart automatically if the process crashes
+Restart=on-failure
+RestartSec=5
+
+# Send stdout and stderr to the systemd journal (view with: journalctl -u mcp-demo -f)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp-demo
+
+# Basic hardening — limits what the process can touch if something goes wrong
+NoNewPrivileges=yes
+ProtectSystem=strict
+# Allow writes to: demo dir (db, logs), pipeline dir (read_file tool), /tmp
+ReadWritePaths=/opt/demo /pipeline /tmp
+
+[Install]
+WantedBy=multi-user.target

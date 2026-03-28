@@ -1,0 +1,19 @@
+# Claude Code project settings (personal/private)
+.claude/
+
+# Project-specific Claude instructions (contains private infrastructure details)
+CLAUDE.md
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Environment / secrets
+.env
+*.env
